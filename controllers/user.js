@@ -83,7 +83,7 @@ module.exports.getUserDetails = (req, res) => {
             }
         })
         .catch(err => {
-            console.error("Error in retrieving user details", err)
+            console.error("Error in retrieving user details: ", err)
             return res.status(500).send({ error: 'Error in retrieving user details' })
         });
 };
@@ -128,7 +128,7 @@ module.exports.updateUserPassword = (req, res) => {
             }
         })
         .catch(err => {
-            console.error("Error in updating the password", err)
+            console.error("Error in updating the password: ", err)
             return res.status(500).send({ error: "Error in updating the password" });
         });
 };
