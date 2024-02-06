@@ -109,6 +109,7 @@ module.exports.updateUserAsAdmin = (req, res) => {
 
 };
 
+// Update Password
 module.exports.updateUserPassword = (req, res) => {
     const { newPassword } = req.body;
     const { id } = req.user;
