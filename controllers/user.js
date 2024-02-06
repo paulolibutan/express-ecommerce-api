@@ -118,12 +118,13 @@ module.exports.updateUserPassword = (req, res) => {
 
     let hashedPassword = bcrypt.hashSync(newPassword, 10);
 
-    console.log(id);
-    console.log(hashedPassword);
-
     User.findByIdAndUpdate(id, { password: hashedPassword })
         .then(result => {
-            return res.status(200).send({ message: "Password has been updated successfully" });
+            if (result) {
+                return res.status(200).send({ message: "Password has been updated successfully" });
+            } else {
+                return res.status(404).send({ error: "User not found" });
+            }
         })
         .catch(err => {
             console.error("Error in updating the password", err)
