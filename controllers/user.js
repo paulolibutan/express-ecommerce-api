@@ -96,10 +96,11 @@ module.exports.updateUserAsAdmin = (req, res) => {
     }
     User.findByIdAndUpdate(req.params.userId, updateIsAdminField, { new: true })
         .then(updatedUser => {
-            return res.status(200).send({
-                message: "User has been promoted to admin role",
-                updatedUser: updatedUser
-            });
+            if (updatedUser) {
+                return res.status(200).send({ message: "User has been promoted to admin role", updatedUser: updatedUser });
+            } else {
+                return res.status(404).send({ error: "User not found" });
+            }
         })
         .catch(err => {
             console.error("Error in updating the user: ", err)
