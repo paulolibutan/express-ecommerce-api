@@ -1,26 +1,39 @@
 # Capstone 2 Ecommerce API Overview
 ### Application Name: E-commerce API
-### Member:
+### Developer:
 - Paulo Libutan
 ### User Credentials:
 - Admin User
-    * email:
-    * password:
+    * email: admin@mail.com
+    * password: admin123
 - Dummy Customer
-    * email:
-    * password:
+    * email: customer@mail.com
+    * password: customer123
 ## Features:
 #### User Resources:
 - User registration
 - User authentication
 - Retrieve User Details
-- Set user as admin (Admin only)
-- Update password
+- Update User as Admin (Admin only)
+- Update Password
 ### Product Resources
-- Create Product (Admin only)
-- Retrieve all products
-- Retrieve all active products
-- Retrieve single product
-- Update Product information (Admin only)
-- Archive Product (Admin only)
-- Activate Product (Admin only)
+- Create Product (Admin Only)
+- Retrieve All Products
+- Retrieve All Active Products
+- Retrieve Single Product
+- Update Product Info (Admin Only)
+- Archive Product (Admin Only)
+- Activate Product (Admin Only)
+### Cart Resources
+- Get User's Cart
+- Add to Cart
+- Change Product Quantity
+- Remove products from Cart
+- Clear Cart Items
+### Order Resources
+- Non-Admin User Checkout (Customer Only)
+- Retrieve All orders (Admin Only)
+- Retrieve authenticated user's orders
+### Search Functionalities
+- Search Product by Name
+- Seach Product by Price Range
