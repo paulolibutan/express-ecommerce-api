@@ -63,7 +63,7 @@ module.exports.addToCart = (req, res) => {
                         })
                         .catch(err => {
                             console.error("Error adding items to the cart: ", err);
-                            return res.status(500).send({ error: "Error adding items to the cart" })
+                            return res.status(500).send({ error: "Error adding items to the cart" });
                         });
 
                 })
@@ -120,13 +120,14 @@ module.exports.updateQuantity = (req, res) => {
                             return res.status(200).send({ message: "Cart has been updated successfully", updatedCart });
                         })
                         .catch(err => {
-                            return res.status(500).send({ error: "Error while updating cart" })
+                            console.log("Error while updating cart: ", err);
+                            return res.status(500).send({ error: "Error while updating cart" });
                         });
 
                 })
                 .catch(err => {
                     console.error("Error while retrieving the cart for update: ", err);
-                    return res.status(500).send({ error: "Error while retrieving the cart for update" })
+                    return res.status(500).send({ error: "Error while retrieving the cart for update" });
                 });
 
 
@@ -139,5 +140,69 @@ module.exports.updateQuantity = (req, res) => {
 };
 
 module.exports.removeFromCart = (req, res) => {
-    
+    const productId = req.params.productId;
+    const userId = req.user.id;
+
+    if (!productId) {
+        return res.status(400).json({ message: "ProductId is required" });
+    }
+
+    Cart.findOne({ userId })
+        .then(cart => {
+            if (!cart) {
+                return res.status(404).json({ message: "Cart not found for the user" });
+            }
+
+            const existingCartItemIndex = cart.cartItems.findIndex(item => item.productId.equals(productId));
+
+            if (existingCartItemIndex < 0) {
+                return res.status(404).json({ message: "Product not found in the user's cart" });
+            }
+
+            const removedItem = cart.cartItems.splice(existingCartItemIndex, 1)[0];
+
+            cart.totalPrice -= removedItem.subTotal;
+
+            cart.save()
+                .then(updatedCart => {
+                    return res.status(200).send({ message: "Cart item has been removed successfully", removedItem, updatedCart });
+                })
+                .catch(err => {
+                    console.log("Error while removing item from the cart: ", err);
+                    return res.status(500).send({ error: "Error while removing item from the cart" });
+                });
+
+        })
+        .catch(err => {
+            console.log("Error while retrieving the cart: ", err);
+            return res.status(500).send({ error: "Error while retrieving the cart" });
+        });
+};
+
+module.exports.clearCart = (req, res) => {
+    const userId = req.user.id;
+
+    Cart.findOne({ userId })
+        .then(cart => {
+            if (!cart) {
+                return res.status(404).json({ message: "Cart not found for the user" });
+            }
+
+            cart.cartItems = [];
+            cart.totalPrice = 0;
+
+            cart.save()
+                .then(cart => {
+                    return res.status(200).json({ message: "Cart has been clear successfully", cart });
+                })
+                .catch(err => {
+                    console.log("Error while retrieving the cart: ", err);
+                    return res.status(500).send({ error: "Error while retrieving the cart" });
+                });
+
+        })
+        .catch(err => {
+            console.log("Error while clearing the cart: ", err);
+            return res.status(500).send({ error: "Error while clearing the cart" });
+        });
 };
