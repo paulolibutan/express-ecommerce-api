@@ -77,7 +77,7 @@ module.exports.getUserDetails = (req, res) => {
     User.findById(req.user.id, { password: 0 })
         .then(user => {
             if (!user) {
-                return res.status(401).send({ error: "User not found" });
+                return res.status(404).send({ error: "User not found" });
             } else {
                 return res.status(200).send({ user });
             }
