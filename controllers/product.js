@@ -140,6 +140,7 @@ module.exports.activateProduct = (req, res) => {
         });
 };
 
+// Search Product by Name
 module.exports.searchProductByName = (req, res) => {
     const { name } = req.body;
 
@@ -158,6 +159,7 @@ module.exports.searchProductByName = (req, res) => {
 
 };
 
+// Search Product by Price Range
 module.exports.searchProductByPriceRange = (req, res) => {
     const { minPrice, maxPrice } = req.body;
 

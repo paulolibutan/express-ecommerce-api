@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { verify, verifyAdmin } = require("../auth")
+const { verify, verifyAdmin } = require("../auth");
 const userController = require("../controllers/user");
 
 // User Routes
