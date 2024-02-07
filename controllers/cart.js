@@ -3,6 +3,12 @@ const Product = require("../models/Product");
 
 module.exports.getUserCart = (req, res) => {
     const userId = req.user.id;
+    const isAdmin = req.user.isAdmin;
+
+    if (isAdmin) {
+        return res.status(403).send({ error: "Retrieving cart is only allowed for logged in customers" });
+    }
+
     Cart.findOne({ userId })
         .then(cart => {
             if (!cart) {
@@ -19,6 +25,11 @@ module.exports.getUserCart = (req, res) => {
 
 module.exports.addToCart = (req, res) => {
     const { productId, quantity } = req.body;
+    const isAdmin = req.user.isAdmin;
+
+    if (isAdmin) {
+        return res.status(403).send({ error: "Adding to cart is only allowed for logged in customers" });
+    }
 
     if (!productId) {
         return res.status(400).send({ message: 'Product ID is required' });
@@ -80,6 +91,11 @@ module.exports.addToCart = (req, res) => {
 
 module.exports.updateQuantity = (req, res) => {
     const { productId, quantity } = req.body;
+    const isAdmin = req.user.isAdmin;
+
+    if (isAdmin) {
+        return res.status(403).send({ error: "Updating cart is only allowed for logged in customers" });
+    }
 
     if (!productId) {
         return res.status(400).send({ message: 'Product ID is required' });
@@ -142,6 +158,11 @@ module.exports.updateQuantity = (req, res) => {
 module.exports.removeFromCart = (req, res) => {
     const productId = req.params.productId;
     const userId = req.user.id;
+    const isAdmin = req.user.isAdmin;
+
+    if (isAdmin) {
+        return res.status(403).send({ error: "Removing items from cart is only allowed for logged in customers" });
+    }
 
     if (!productId) {
         return res.status(400).json({ message: "ProductId is required" });
@@ -181,6 +202,11 @@ module.exports.removeFromCart = (req, res) => {
 
 module.exports.clearCart = (req, res) => {
     const userId = req.user.id;
+    const isAdmin = req.user.isAdmin;
+
+    if (isAdmin) {
+        return res.status(403).send({ error: "Removing all items from cart is only allowed for logged in customers" });
+    }
 
     Cart.findOne({ userId })
         .then(cart => {
