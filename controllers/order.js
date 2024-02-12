@@ -38,6 +38,11 @@ module.exports.checkoutOrder = (req, res) => {
                     console.log("Error while checking out the order: ", err);
                     return res.status(500).send({ error: "Error while checking out the order" });
                 });
+
+            cart.cartItems = [];
+            cart.totalPrice = 0;
+            cart.save();
+                
         })
         .catch(err => {
             console.log("Error while retrieving the cart: ", err);
