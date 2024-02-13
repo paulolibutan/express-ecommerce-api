@@ -321,6 +321,16 @@ module.exports.updateUserPasswordForm = (req, res) => {
                 return res.render("error-alert", { error });
             }
 
+            if (newPassword.length < 8) {
+                const error = "Password must be at least 8 characters";
+                return res.render("error-alert", { error });
+            }
+
+            if (newPassword === currentPassword) {
+                const error = "You cannot reuse your old password";
+                return res.render("error-alert", { error });
+            }
+
             // Update user's password and clear reset fields
             user.password = bcrypt.hashSync(newPassword, 10);
             user.resetPasswordToken = undefined;
