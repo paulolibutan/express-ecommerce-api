@@ -276,7 +276,8 @@ module.exports.updateUserPasswordWithToken = (req, res) => {
     })
         .then(user => {
             if (!user) {
-                return res.status(400).send({ error: "Invalid or expired token" });
+                const error = "Invalid or Expired Token"
+                return res.render("invalid-token", { error });
             }
 
             // Construct the absolute path to the reset-password.html file
