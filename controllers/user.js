@@ -43,7 +43,7 @@ module.exports.registerUser = (req, res) => {
 
                 newUser.save()
                     .then(user => {
-                        const confirmationUrl = `http://localhost:4000/users/${confirmationToken}`;
+                        const confirmationUrl = `http://ec2-18-218-180-213.us-east-2.compute.amazonaws.com/b6/users/${confirmationToken}`;
                         const mailOptions = {
                             from: "ecommerce-demo-app@hotmail.com",
                             to: email,
@@ -229,7 +229,7 @@ module.exports.updateUserPassword = (req, res) => {
                 from: "ecommerce-demo-app@hotmail.com",
                 to: email,
                 subject: "Ecommerce App: Password Reset Request",
-                text: `You have requested to reset your password. Click the following link to continue: http://localhost:4000/users/update-password/${token}`
+                text: `You have requested to reset your password. Click the following link to continue: 	http://ec2-18-218-180-213.us-east-2.compute.amazonaws.com/b6/users/update-password/${token}`
             };
 
             try {
