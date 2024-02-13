@@ -295,7 +295,7 @@ module.exports.updateUserPasswordWithToken = (req, res) => {
 
 module.exports.updateUserPasswordForm = (req, res) => {
     const { token } = req.params;
-    const { password } = req.body;
+    const { currentPassword, newPassword } = req.body;
 
     User.findOne({
         resetPasswordToken: token,
@@ -306,8 +306,14 @@ module.exports.updateUserPasswordForm = (req, res) => {
                 return res.status(400).send({ error: "Invalid or expired token" });
             }
 
+            const isPasswordValid = bcrypt.compareSync(currentPassword, user.password);
+
+            if (!isPasswordValid) {
+                return res.status(401).send({ error: "Current password is incorrect" });
+            }
+
             // Update user's password and clear reset fields
-            user.password = bcrypt.hashSync(password, 10);
+            user.password = bcrypt.hashSync(newPassword, 10);
             user.resetPasswordToken = undefined;
             user.resetPasswordExpires = undefined;
 
