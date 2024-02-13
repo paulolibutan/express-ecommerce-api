@@ -81,7 +81,8 @@ module.exports.confirmEmail = (req, res) => {
     })
         .then(user => {
             if (!user) {
-                return res.status(400).send({ error: "Invalid or expired token" });
+                const error = "Invalid or expired token";
+                return res.render("error-alert", { error });
             }
 
             // Update user's emailConfirmed status
@@ -100,20 +101,24 @@ module.exports.confirmEmail = (req, res) => {
 
                     try {
                         sendgridTransporter.sendMail(mailOptions);
-                        return res.status(200).send({ message: "Email confirmed successfully" });
-                    } catch (error) {
-                        console.error(error);
-                        return res.status(500).send({ error: "Error sending email" });
+                        const message = "Email confirmed successfully";
+                        return res.render("successful-alert", { message });
+                    } catch (err) {
+                        console.error("Error sending email: ", err);
+                        const error = "Error sending email";
+                        return res.render("error-alert", { error });
                     }
                 })
                 .catch(err => {
                     console.error("Error in saving the user: ", err);
-                    return res.status(500).send({ error: "Error in saving the user" });
+                    const error = "Error in saving the user";
+                    return res.render("error-alert", { error });
                 });
         })
         .catch(err => {
             console.error("Error in retrieving the user: ", err);
-            return res.status(500).send({ error: "Error in retrieving the user" });
+            const error = "Error in retrieving the user";
+            return res.render("error-alert", { error });
         });
 
 };
@@ -277,7 +282,7 @@ module.exports.updateUserPasswordWithToken = (req, res) => {
         .then(user => {
             if (!user) {
                 const error = "Invalid or Expired Token"
-                return res.render("invalid-token", { error });
+                return res.render("error-alert", { error });
             }
 
             // Construct the absolute path to the reset-password.html file
@@ -289,7 +294,8 @@ module.exports.updateUserPasswordWithToken = (req, res) => {
         })
         .catch(err => {
             console.error("Error in retrieving the user: ", err);
-            return res.status(500).send({ message: "Error in retrieving the user" });
+            const error = "Error in retrieving the user";
+            return res.render("error-alert", { error });
         });
 
 };
@@ -304,13 +310,15 @@ module.exports.updateUserPasswordForm = (req, res) => {
     })
         .then(user => {
             if (!user) {
-                return res.status(400).send({ error: "Invalid or expired token" });
+                const error = "Invalid or Expired Token"
+                return res.render("error-alert", { error });
             }
 
             const isPasswordValid = bcrypt.compareSync(currentPassword, user.password);
 
             if (!isPasswordValid) {
-                return res.status(401).send({ error: "Current password is incorrect" });
+                const error = "Current password is incorrect";
+                return res.render("error-alert", { error });
             }
 
             // Update user's password and clear reset fields
@@ -329,19 +337,23 @@ module.exports.updateUserPasswordForm = (req, res) => {
 
                     try {
                         sendgridTransporter.sendMail(mailOptions);
-                        return res.status(200).send({ message: "Password has been updated successfully" });
-                    } catch (error) {
-                        console.error(error);
-                        return res.status(500).send({ error: "Error sending email" });
+                        const message = "Password has been updated successfully";
+                        return res.render("successful-alert", { message });
+                    } catch (err) {
+                        console.error("Error sending email: ", err);
+                        const error = "Error sending email";
+                        return res.render("error-alert", { error });
                     }
                 })
                 .catch(err => {
                     console.error("Error in saving the user: ", err);
-                    return res.status(500).send({ error: "Error in saving the user" });
+                    const error = "Error in saving the user";
+                    return res.render("error-alert", { error });
                 });
         })
         .catch(err => {
             console.error("Error in retrieving the user: ", err);
-            return res.status(500).send({ error: "Error in retrieving the user" });
+            const error = "Error in retrieving the user";
+            return res.render("error-alert", { error });
         });
 };
