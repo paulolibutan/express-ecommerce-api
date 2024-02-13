@@ -130,7 +130,29 @@ module.exports.loginUser = (req, res) => {
             }
 
             if (!user.emailConfirmed) {
-                return res.status(400).send({ error: "Email is not confirmed. Please check your email to confirm your account." });
+                // Generate a confirmation token
+                const confirmationToken = crypto.randomBytes(36).toString("hex");
+                const confirmationExpires = Date.now() + 24 * 3600 * 1000; // Token expires in 24 hours
+
+                user.confirmationToken = confirmationToken;
+                user.confirmationExpires = confirmationExpires;
+                user.save();
+
+                const confirmationUrl = `http://ec2-18-218-180-213.us-east-2.compute.amazonaws.com/b6/users/${confirmationToken}`;
+                const mailOptions = {
+                    from: "ecommerce-demo-app@hotmail.com",
+                    to: email,
+                    subject: "EcommerceApp: Confirm your email",
+                    html: `Click <a href="${confirmationUrl}">here</a> to confirm your email.`
+                };
+
+                try {
+                    sendgridTransporter.sendMail(mailOptions);
+                    return res.status(400).send({ error: "Email is not yet confirmed. We have resent the confirmation link to your email." });
+                } catch (error) {
+                    console.error(error);
+                    return res.status(500).send({ error: "Error sending email" });
+                }
             }
 
             const isPasswordCorrect = bcrypt.compareSync(password, user.password);
