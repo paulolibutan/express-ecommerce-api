@@ -40,7 +40,7 @@ module.exports.getAllProducts = (req, res) => {
 module.exports.getAllActiveProducts = (req, res) => {
     Product.find({ isActive: true })
         .then(products => {
-            if (products) {
+            if (products.length > 0) {
                 return res.status(200).send({ products });
             } else {
                 return res.status(404).send({ message: "No available products at the moment" });
