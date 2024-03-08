@@ -32,11 +32,11 @@ module.exports.addToCart = (req, res) => {
     }
 
     if (!productId) {
-        return res.status(400).send({ message: 'Product ID is required' });
+        return res.status(400).send({ error: 'Product ID is required' });
     }
 
     if (!Number.isInteger(quantity) || quantity <= 0) {
-        return res.status(400).send({ message: "Quantity is required and must be a positive integer greater than 0" });
+        return res.status(400).send({ error: "Quantity is required and must be a positive integer greater than 0" });
     }
 
     Product.findById(productId)
@@ -70,7 +70,7 @@ module.exports.addToCart = (req, res) => {
 
                     cart.save()
                         .then(savedCart => {
-                            return res.status(201).send({ message: "Cart has been saved", savedCart });
+                            return res.status(201).send({ message: "Product has been added to the cart", savedCart });
                         })
                         .catch(err => {
                             console.error("Error adding items to the cart: ", err);
