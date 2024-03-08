@@ -12,7 +12,7 @@ module.exports.getUserCart = (req, res) => {
     Cart.findOne({ userId })
         .then(cart => {
             if (!cart) {
-                return res.status(404).send({ message: "Cart not found for the user" });
+                return res.status(404).send({ error: "Cart not found for the user" });
             } else {
                 return res.status(200).send({ cart });
             }
