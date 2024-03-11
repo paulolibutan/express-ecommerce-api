@@ -165,19 +165,19 @@ module.exports.removeFromCart = (req, res) => {
     }
 
     if (!productId) {
-        return res.status(400).json({ message: "ProductId is required" });
+        return res.status(400).json({ error: "ProductId is required" });
     }
 
     Cart.findOne({ userId })
         .then(cart => {
             if (!cart) {
-                return res.status(404).json({ message: "Cart not found for the user" });
+                return res.status(404).json({ error: "Cart not found for the user" });
             }
 
             const existingCartItemIndex = cart.cartItems.findIndex(item => item.productId.equals(productId));
 
             if (existingCartItemIndex < 0) {
-                return res.status(404).json({ message: "Product not found in the user's cart" });
+                return res.status(404).json({ error: "Product not found in the user's cart" });
             }
 
             const removedItem = cart.cartItems.splice(existingCartItemIndex, 1)[0];
