@@ -98,11 +98,11 @@ module.exports.updateQuantity = (req, res) => {
     }
 
     if (!productId) {
-        return res.status(400).send({ message: 'Product ID is required' });
+        return res.status(400).send({ error: 'Product ID is required' });
     }
 
     if (!Number.isInteger(quantity) || quantity <= 0) {
-        return res.status(400).send({ message: "Quantity is required and must be a positive integer greater than 0" });
+        return res.status(400).send({ error: "Quantity is required and must be a positive integer greater than 0" });
     }
 
     Product.findById(productId)
@@ -117,13 +117,13 @@ module.exports.updateQuantity = (req, res) => {
             Cart.findOne({ userId })
                 .then(cart => {
                     if (!cart) {
-                        return res.status(404).send({ message: "Cart not found for the user" });
+                        return res.status(404).send({ error: "Cart not found for the user" });
                     }
 
                     const existingCartItem = cart.cartItems.find(item => item.productId.equals(productId));
 
                     if (!existingCartItem) {
-                        return res.status(404).send({ message: "Product not found in the user's cart" });
+                        return res.status(404).send({ error: "Product not found in the user's cart" });
                     }
 
                     existingCartItem.quantity = quantity;
