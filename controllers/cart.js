@@ -211,7 +211,7 @@ module.exports.clearCart = (req, res) => {
     Cart.findOne({ userId })
         .then(cart => {
             if (!cart) {
-                return res.status(404).json({ message: "Cart not found for the user" });
+                return res.status(404).json({ error: "Cart not found for the user" });
             }
 
             cart.cartItems = [];
@@ -219,7 +219,7 @@ module.exports.clearCart = (req, res) => {
 
             cart.save()
                 .then(cart => {
-                    return res.status(200).json({ message: "Cart has been clear successfully", cart });
+                    return res.status(200).json({ message: "Cart has been cleared successfully", cart });
                 })
                 .catch(err => {
                     console.log("Error while retrieving the cart: ", err);
