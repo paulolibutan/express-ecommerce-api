@@ -13,11 +13,11 @@ module.exports.checkoutOrder = (req, res) => {
     Cart.findOne({ userId })
         .then(cart => {
             if (!cart) {
-                return res.status(404).send({ message: "Cart not found for the user" });
+                return res.status(404).send({ error: "Cart not found for the user" });
             }
 
             if (cart.cartItems.length < 1) {
-                return res.status(400).send({ message: "Cannot checkout order. The cart is empty" });
+                return res.status(400).send({ error: "Cannot checkout order. The cart is empty" });
             }
 
             const order = new Order({
